@@ -36,10 +36,10 @@ class AESFastEngine extends BaseBlockCipher {
 
   static const _BLOCK_SIZE = 16;
 
-  bool _forEncryption;
-  List<List<int>> _workingKey;
-  int _rounds;
-  int _c0, _c1, _c2, _c3;
+  bool _forEncryption = false;
+  List<List<int>>? _workingKey;
+  int _rounds = 0;
+  int _c0 = 0, _c1 = 0, _c2 = 0, _c3 = 0;
 
   @override
   String get algorithmName => 'AES';

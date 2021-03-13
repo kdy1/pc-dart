@@ -39,8 +39,8 @@ class HkdfParameters extends CipherParameters {
   HkdfParameters._(this.ikm, this.desiredKeyLength,
       [this.salt, this.info, this.skipExtract = false]);
 
-  factory HkdfParameters(ikm, desiredKeyLength,
-      [salt, info, skipExtract = false]) {
+  factory HkdfParameters(Uint8List ikm, int desiredKeyLength,
+      [Uint8List salt, Uint8List info, bool skipExtract = false]) {
     if (ikm == null) {
       throw ArgumentError('IKM (input keying material) should not be null');
     }

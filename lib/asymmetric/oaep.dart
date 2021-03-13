@@ -91,11 +91,11 @@ class OAEPEncoding extends BaseAsymmetricBlockCipher {
     if (params is ParametersWithRandom) {
       var paramswr = params;
       _random = paramswr.random;
-      akparams = paramswr.parameters;
+      akparams = paramswr.parameters as AsymmetricKeyParameter<AsymmetricKey>;
     } else {
       _random = FortunaRandom();
       _random.seed(KeyParameter(_seed()));
-      akparams = params;
+      akparams = params as AsymmetricKeyParameter<AsymmetricKey>;
     }
     _engine.init(forEncryption, akparams);
     _forEncryption = forEncryption;

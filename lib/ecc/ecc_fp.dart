@@ -267,7 +267,7 @@ class ECPoint extends ecc.ECPointBase {
       }
 
       // this = -b, i.e. the result is the point at infinity
-      return curve.infinity;
+      return curve.infinity as ECPoint;
     }
 
     var gamma = (b.y - y) / (b.x - x);
@@ -275,7 +275,8 @@ class ECPoint extends ecc.ECPointBase {
     var x3 = (gamma.square() - x) - b.x;
     var y3 = (gamma * (x - x3)) - y;
 
-    return ECPoint(curve, x3, y3, isCompressed);
+    return ECPoint(curve as ECCurve, x3 as ECFieldElement, y3 as ECFieldElement,
+        isCompressed);
   }
 
   // B.3 pg 62
@@ -286,10 +287,10 @@ class ECPoint extends ecc.ECPointBase {
       return this;
     }
 
-    if (y.toBigInteger() == 0) {
+    if (y.toBigInteger() == (0 as BigInt)) {
       // if y1 == 0, then (x1, y1) == (x1, -y1)
       // and hence this = -this and thus 2(x1, y1) == infinity
-      return curve.infinity;
+      return curve.infinity as ECPoint;
     }
 
     var two = curve.fromBigInteger(BigInt.two);
@@ -299,7 +300,8 @@ class ECPoint extends ecc.ECPointBase {
     var x3 = gamma.square() - (x * two);
     var y3 = (gamma * (x - x3)) - y;
 
-    return ECPoint(curve, x3, y3, isCompressed);
+    return ECPoint(curve as ECCurve, x3 as ECFieldElement, y3 as ECFieldElement,
+        isCompressed);
   }
 
   // D.3.2 pg 102 (see Note:)
@@ -315,7 +317,8 @@ class ECPoint extends ecc.ECPointBase {
 
   @override
   ECPoint operator -() {
-    return ECPoint(curve, x, -y, isCompressed);
+    return ECPoint(curve as ECCurve, x as ECFieldElement, -y as ECFieldElement,
+        isCompressed);
   }
 }
 
@@ -342,7 +345,7 @@ class ECCurve extends ecc.ECCurveBase {
   @override
   ECPoint decompressPoint(int yTilde, BigInt x1) {
     var x = fromBigInteger(x1);
-    var alpha = (x * ((x * x) + a)) + b;
+    var alpha = (x * ((x * x) + (a as ECFieldElement))) + (b as ECFieldElement);
     var beta = alpha.sqrt();
 
     //
@@ -391,7 +394,7 @@ class _WNafPreCompInfo implements PreCompInfo {
 ecc.ECPointBase _wNafMultiplier(
     ecc.ECPointBase p, BigInt k, PreCompInfo preCompInfo) {
   // Ignore empty PreCompInfo or PreCompInfo of incorrect type
-  _WNafPreCompInfo wnafPreCompInfo = preCompInfo;
+  var wnafPreCompInfo = preCompInfo as _WNafPreCompInfo;
   if ((preCompInfo == null) && (preCompInfo is! _WNafPreCompInfo)) {
     wnafPreCompInfo = _WNafPreCompInfo();
   }
@@ -450,13 +453,13 @@ ecc.ECPointBase _wNafMultiplier(
   if (preComp == null) {
     // Precomputation must be performed from scratch, create an empty
     // precomputation array of desired length
-    preComp = List<ECPoint>.filled(1, p);
+    preComp = List<ECPoint>.filled(1, p as ECPoint);
   } else {
     // Take the already precomputed ECPoints to start with
     preCompLen = preComp.length;
   }
 
-  twiceP ??= p.twice();
+  twiceP ??= p.twice() as ECPoint;
 
   if (preCompLen < reqPreCompLen) {
     // Precomputation array must be made bigger, copy existing preComp
